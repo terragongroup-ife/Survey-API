@@ -1,39 +1,42 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
-const QuestionModel = require('../Model/questions');
+const controller = require('../Controllers/controller');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
+// Save the signup details
 
-router.post('/questions', (req, res) => {
-    const question = req.body
-    const schema = QuestionModel(question);
-    schema.save({
-    }).then ((resp) => {
-        console.log(resp);
-        return res.send ({
-            error: false,
-            status: 201,
-            message: 'Questions was saved successfully'
-        })
-    }).catch((err) => {
-        console.log('Questions was not created', err);
-        return res.send ({
-            error: true,
-            status: 400,
-            message: 'Unable to save questions to the Database'
-        })
-    })
+router.post('/signup', (req, res) => {
+    return controller.signUp(req, res);
+});
+
+// save the category details
+router.post('/category', (req, res) => {
+    return controller.category(req, res);
 });
 
 
-router.get('/questions/:id', (req, res) => {
-    const questions = req.params.id
+// Save a Question
+
+router.post('/questions', (req, res) => {
+   return controller.createSurvey(req, res);
+});
+
+
+// Get All Questions
+
+router.get('/questions', (req, res) => {
+   return controller.getQuestions(req, res);
 })
 
 
+// Get Individual Questions
+
+router.get('/question/:questionsId', (req, res) => {
+    return controller.getIndQuestions(req, res);
+})
 
 
 module.exports = router;

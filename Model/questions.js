@@ -3,30 +3,28 @@ const Schema = mongoose.Schema;
 
 const questionsSchema = new Schema ({
     question: {
-        type: String,
+        type: [Object],
         required: true, 
         minLength: 1,
         trim: true    
     },
-    questionId: {
+    username: {
         type: String,
         minLength: 1,
         trim: true,
         required: true,
-        unique: true
     }, 
-    userId: {
-        type: String,
-        minLength: 1,
-        trim: true,
-        required: true,
-        unique: true
-    },
     options: {
-        type: Object
+        type: [ String ],
+        required: false,
+        default: []
+    },
+    category: {
+        ref: 'Category',
+        type: mongoose.Schema.Types.ObjectId
     }
 });
 
-const Questions = mongoose.model('Questions', questionsSchema);
+const Questions = mongoose.model('Question', questionsSchema);
 
 module.exports = Questions;

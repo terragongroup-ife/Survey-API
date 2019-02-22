@@ -2,17 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const questionsSchema = new Schema ({
-    question: {
+    questions: {
         type: [Object],
-        required: true, 
-        minLength: 1,
-        trim: true    
+        required: true,    
     },
     username: {
-        type: String,
-        minLength: 1,
-        trim: true,
-        required: true,
+        ref: 'Login',
+        type: mongoose.Schema.Types.ObjectId
     }, 
     options: {
         type: [ String ],
@@ -25,6 +21,6 @@ const questionsSchema = new Schema ({
     }
 });
 
-const Questions = mongoose.model('Question', questionsSchema);
+const QuestionsModel = mongoose.model('Question', questionsSchema);
 
-module.exports = Questions;
+module.exports = QuestionsModel;

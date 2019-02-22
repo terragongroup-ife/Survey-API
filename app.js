@@ -12,7 +12,7 @@ const appName = config.appName;
 app.use(router);
 
 app.get('/', (req, res) => {
-    res.send('Welcome to the Survey API')
+    res.send('Welcome to Terra-Survey')
 });
 
 app.listen(port, (res) => {

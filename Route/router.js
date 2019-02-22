@@ -6,13 +6,16 @@ const controller = require('../Controllers/controller');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
-// Save the signup details
 
-router.post('/signup', (req, res) => {
-    return controller.signUp(req, res);
+// Sign in
+
+router.post('/signIn', (req, res) => {
+    return controller.signIn(req, res);
 });
 
+
 // save the category details
+
 router.post('/category', (req, res) => {
     return controller.category(req, res);
 });

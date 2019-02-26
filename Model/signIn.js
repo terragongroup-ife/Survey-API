@@ -10,6 +10,7 @@ const signInSchema = new Schema ({
     email: {
         type: String,
         required: true,
+        unique: true
     },
     authToken: {
         type: String,

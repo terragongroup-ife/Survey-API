@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
-const router = require('.//Route/router');
+const router = require('./Route/router');
 const config = require('./Config/config');
 const mongo = require('./Settings/settings');
 const app = express();

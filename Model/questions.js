@@ -2,22 +2,25 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const questionsSchema = new Schema ({
-    questions: {
-        type: [Object],
+    userId: {
+        type: String,
         required: true,    
     },
-    username: {
-        ref: 'Login',
-        type: mongoose.Schema.Types.ObjectId
-    }, 
-    options: {
-        type: [ String ],
-        required: false,
-        default: []
+    surveyName: {
+        type: String,
+        required: true,    
     },
-    category: {
+    surveyDescription: {
+        type: String,
+        required: true,    
+    },
+    surveyCategory: {
         ref: 'Category',
         type: mongoose.Schema.Types.ObjectId
+    },
+    surveyQuestions: {
+        type: [ Object ],
+        required: true,    
     }
 });
 

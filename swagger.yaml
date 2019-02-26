@@ -1,0 +1,228 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Survey Test
+    url: >-
+      https://virtserver.swaggerhub.com/TerragonGroup/ussd-shortcode-config/1.0.0
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/TerragonGroup/Sms-configs/1.0.0'
+info:
+  description: This is an API for the Survey App.
+  version: "1.0.0"
+  title: Survey Test
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /login:
+    post:
+      summary: For logging users in or signing users up
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+        description: Sign users up or logs user into platform
+      responses:
+        '202':
+          description: User successfully signed in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          description: Name already exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      
+  /post-survey:
+    post:
+      summary: For storing a new survey in the db
+      operationId: post-survey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-survey'
+        description: Sign users up or logs user into platform
+      responses:
+       '202':
+          description: Questions was saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          description: Unable to save questions to the Database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /surveys/:user-id/:number :
+    get:
+      summary: To fetch a number of surveys for a particular user
+      parameters:
+        - in: body
+          name: user-id
+          description: A user ID
+          required: true
+          schema:
+            type: string
+        - in: body
+          name: number
+          description: Number of surveys to return
+          required: true
+          schema:
+            type: number
+      responses:
+        '202':
+          description: Query was successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          description: Unable to query question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /survey/:survey-id :
+    get:
+      summary: Fetch the full datails of a survey
+      parameters:
+        - in: body
+          name: survey-id
+          description: A survey ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Query was successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          description: Unable to query question
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /post-response:
+    post:
+      summary: For storing a new response to a survey in the db
+      operationId: post-response
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-response'
+        description: Stores a new response to a survey in db
+        responses:
+        '202':
+          description: Response saved succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+        '400':
+          description: Unable to save response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        
+
+
+components:
+  schemas:
+    login:
+      type: object
+      required:
+      - 'email'
+      - 'name'
+      - 'authToken'
+      properties:
+        email:
+          type: string
+          example: 'test@example.com'
+        name:
+          type: string
+          example: 'Testing tester'
+        authToken:
+          type: string
+          example: 'helloWorld'
+    post-survey:
+      type: object
+      required:
+      - 'user_id'
+      - 'surveyName'
+      - 'surveyDescription'
+      - 'surveyCategory'
+      - 'surveyQuestions'
+      properties:
+        user_id:
+          type: string
+          example: 't455es9t23d5dk45a4c1z0m'
+        surveyName:
+          type: string
+          example: 'Final year research'
+        surveyDescription:
+          type: string
+          example: 'Hello world, a description'
+        surveyCategory:
+          type: string
+          example: 'Research'
+        surveyQuestions:
+          type: object
+          example: {}
+    post-response:
+      type: object
+      required:
+      - 'surveyId'
+      - 'respondentId'
+      - 'surveyResponses'
+      properties:
+        surveyId:
+          type: string
+          example: 't455es9t23d5dk45a4c1z0m'
+        respondentId:
+          type: string
+          example: '5dk45a4c1z0mt455es9t23d'
+        surveyResponses:
+          type: object
+          example: {}

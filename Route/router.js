@@ -42,4 +42,15 @@ router.get('/question/:questionsId', (req, res) => {
 })
 
 
+// Query by userId
+
+router.get('/surveys/:userId', (req, res) => {
+    return controller.getQuestionsByUserId(req, res);
+})
+
+// Post response
+router.get('/postresponse', (req, res) => {
+    return controller.postResponse(req, res);
+})
+
 module.exports = router;

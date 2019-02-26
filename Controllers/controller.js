@@ -1,37 +1,13 @@
 const signInModel = require('../Model/signIn')
 const categoryModel = require('../Model/category');
 const QuestionsModel = require('../Model/questions');
+const responseModel = require('../Model/response');
 
 
 
 module.exports = {
-    createSurvey: (req, res) => {
-        const { questions, username, options, category } = req.body         
-        console.log(req.body);
-        QuestionsModel.create({
-            questions,
-            username,
-            options,
-            category
-        }).then((resp) => {
-            console.log('Saved',resp);
-                return res.send ({
-                    error: false,
-                    status: 201,
-                    message: 'Questions was saved successfully'
-                })
-            }).catch((err) => {
-                console.log('Not saved',err);
-                return res.send ({
-                    error: true,
-                    status: 400,
-                    message: 'Unable to save questions to the Database'
-                })
-            })
 
-    },
-
-    // SignIn 
+    // SignIn... Endpoint 2
 
     signIn: (req, res) =>{
         const { name, email, authToken } = req.body;
@@ -52,11 +28,76 @@ module.exports = {
         return res.send({
             err: true, 
             code: 400,
-            message: 'Name already taken', 
+            message: 'Name already exist', 
         });
     })
  },
-    
+
+
+    // Endpoint 3
+
+    createSurvey: (req, res) => {
+        const { userId, surveyName, surveyDescription, surveyCategory, surveyQuestions } = req.body 
+        QuestionsModel.create({
+            userId,
+            surveyName,
+            surveyDescription,
+            surveyCategory,
+            surveyQuestions
+        }).then((resp) => {
+            console.log('Saved',resp);
+                return res.send ({
+                    error: false,
+                    status: 201,
+                    message: 'Questions was saved successfully',
+                    result: resp
+                })
+            }).catch((err) => {
+                console.log('Not saved',err);
+                return res.send ({
+                    error: true,
+                    status: 400,
+                    message: 'Unable to save questions to the Database'
+                })
+            })
+
+    },
+
+    // Endpoint 4
+
+getQuestionsByUserId: (req, res) => {
+    const { userId } = req.params;
+    const { number } = req.query;
+    console.log(userId, number)
+        QuestionsModel.findById({
+            userId
+        }).then((resp) => {
+        if (resp) { 
+            console.log(resp);
+           return res.send ({
+            error: false,
+            code: 201,
+             message: 'Query was successfull',
+             result: resp 
+            });
+        }
+        console.log(resp);
+      return res.send ({
+            error: false,
+            code: 201,
+            message: 'Question was successfully fetched'    
+        });
+    }).catch((err) => {
+        console.log('Data does not exist in the DB');
+        return res.send ({
+            error: true,
+            status: 400,
+            message: 'Unable to query question'
+        });
+    }) 
+},
+
+
     // Get all questions
 
     getQuestions: (req, res) => {
@@ -64,8 +105,8 @@ module.exports = {
         return QuestionsModel.aggregate([
             {
                 $lookup: {
-                    from: "Login",
-                    localField: "username",
+                    from: "signins",
+                    localField: "name",
                     foreignField: "_id",
                     as: "user"
                 }
@@ -89,11 +130,12 @@ module.exports = {
                     message: 'No questions found'
                 })
             }
+        
             console.log(resp)
             return res.send ({
                 error: false,
                 code: 201,
-                data: resp,
+                result: resp,
                 message: 'Questions were successfully fetched'
             });
         }).catch(err =>{
@@ -106,7 +148,7 @@ module.exports = {
         })
     },
 
-    // Get Individual Questions
+    // Get Individual Questions... Endpoint 5
 
     getIndQuestions: (req, res) => {
         const id = (req.params.questionsId);
@@ -118,8 +160,8 @@ module.exports = {
                return res.send ({
                 error: false,
                 code: 201,
-                 message: 'Question was successfully fetched',
-                 data: resp 
+                 message: 'Query was successfull',
+                 result: resp 
                 });
             }
             console.log(resp);
@@ -138,7 +180,35 @@ module.exports = {
         }) 
     },
 
-    // Get Questions by category
+        // Post resonse... Endpoint 6
+
+    postResponse: (req, res) => {
+            const { surveyId, respondentId, surveyResponses } = req.body;
+        return responseModel.create({
+            surveyId,
+            respondentId,
+            surveyResponses
+        }).then((response) => {
+            console.log('Response saved succesfully', response);
+            return res.send({
+                err: false, 
+                code: 200,
+                message: 'Response saved succesfully',
+                response: response
+            });
+        }).catch(() => {
+            console.log('Unable to save response');
+            return res.send({
+                err: true, 
+                code: 400,
+                message: 'Unable to save response', 
+            });
+        })
+    },
+
+
+
+    // Save a category for Endpoint
 
     category: (req, res) => {
         const name = req.body.name
@@ -158,5 +228,6 @@ module.exports = {
                 message: 'Data not saved'
         });
     }
-    )}
+    )},
 }
+

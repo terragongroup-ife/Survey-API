@@ -11,6 +11,8 @@ const appName = config.appName;
 
 app.use(router);
 
+// Endpoint 1
+
 app.get('/', (req, res) => {
     res.send('Welcome to Terra-Survey')
 });

@@ -8,7 +8,6 @@ console.log('Connecting to Mongo DB on ', connectionUrl);
 mongoose.connect(connectionUrl, {useNewUrlParser: true})
     .then((data) => {
         console.log('MongoDB was connected sucessfully');
-        return data;
     }).catch((err) => {
         console.log('Unable to connect to mongoBD', err);
         process.exit();

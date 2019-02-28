@@ -2,56 +2,115 @@ const signInModel = require('../Model/signIn')
 const categoryModel = require('../Model/category');
 const QuestionsModel = require('../Model/questions');
 const responseModel = require('../Model/response');
+const signUpModel = require('../Model/signUp')
 
 
 class SurveyController {
 //handles all logic for surveys
 
+    // SIgnUp
 
-    //Endpoint 2
+    signUp (req, res) {
+            const { name, email } = req.body;
+            console.log(req.body);
+        if ( !name || !email) {
+                console.log('Some fields are not filled');
+                return res.send({
+                    error: true,
+                    code: 400,
+                    message: "name, email must be passed"
+                }); 
+            }
+        return signUpModel.create({
+                name,
+                email
+            }).then ((resp) => {
+                console.log('Sign up was successful')
+            return res.send({
+                        error: false,
+                        status: 201,
+                        message: 'You have successfully signed up',
+
+
+
+                })
+            }).catch((err) => {
+                console.log('Not saved');
+                if (err) {
+                    if (err.name === 'MongoError' && err.code === 11000) {
+                        return res.send ({
+                            code: 400,
+                            message: 'Email already exist' 
+                        })
+                    } else {
+                        return res.send({
+                            err: true, 
+                            code: 400,
+                            message: 'Email is invalid' 
+                        });
+                    }
+                }
+            })
+        }
+
+    //SignIn
 
     signIn (req, res) {
-        const { name, email, authToken } = req.body;
-        if ( !name || !email || !authToken ) ({
-            error: true,
-               code: 503,
-               message: "name, email, authToken must be passed"
-        })
-        return signInModel.create({
-                name,
-                email,
-                authToken
-            })
-            .then((response) => {
-                console.log('User succesfully signed in', response);
-                return res.send({
-                    err: false, 
-                    code: 200,
-                    message: 'User successfully signed in',
-                    response: response
-                });
-            })
-            .catch(() => {
-                console.log('Unable to sign in user');
+            const { email, authToken } = req.body;
+            if ( !email || !authToken ) {
                 return res.send({
                     err: true, 
                     code: 400,
-                    message: 'Name already exist', 
-                });
+                    message: 'name, email, authToken must be passed'
+                })
+            }
+            return signUpModel.findOne({email})
+                .then((response) => {
+                    console.log('User succesfully signed in');
+                    if (response) {
+                        return res.send({
+                            err: false, 
+                            code: 200,
+                            message: 'User successfully signed in'
+                        });
+                    } 
+                    console.log('Unable to sign in');
+                    return res.send({
+                        err: false, 
+                        code: 404,
+                        message: 'User does not exisit, kindly sign up'
+                    });
+                })
+                .catch((err) => {
+                    console.log('Unable to sign in user');
+                    return res.send({
+                        err: true, 
+                        code: 503,
+                        message: err
             })
-    }
+        })
+     }
 
-    // Endpoint 3
+    // Create Survey
 
     createSurvey (req, res) {
-        const { userId, surveyName, surveyDescription, surveyCategory, surveyQuestions } = req.body 
-        if ( !userId || !surveyName || !surveyDescription || !surveyCategory || surveyQuestions ) {
+        const { userId, surveyName, surveyDescription, surveyCategory, surveyQuestions } = req.body
+        console.log(req.body); 
+        if ( !userId || !surveyName || !surveyDescription || !surveyCategory || !surveyQuestions ) {
             console.log('Some fields are not filled');
-            return res.send ({
+            return res.send({
                 error: true,
-                code: 503,
+                code: 400,
                 message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
-            })
+            });
+        }
+
+        if (surveyQuestions.length === 0) {
+            return res.send({
+                error: true,
+                code: 400,
+                message: "No question sent"
+            });
         }
         return QuestionsModel.create({
             userId,
@@ -77,7 +136,7 @@ class SurveyController {
             })
     }
 
-        // Endpoint 4
+    // Get Questions By UserId
 
     getQuestionsByUserId (req, res) {
         const { userId } = req.params;
@@ -116,7 +175,7 @@ class SurveyController {
         }) 
     }
 
-     // Endpoint 5
+     // Get Questions By Id
 
     getIndQuestions (req, res) {
         const id = (req.params.questionsId);
@@ -139,18 +198,18 @@ class SurveyController {
                     message: 'Question was successfully fetched'    
                 });
             }).catch((err) => {
-                console.log('Data does not exist in the DB');
+                console.log('Unable to fetch question');
                 return res.send ({
                     error: true,
                     status: 400,
-                    message: 'Unable to fetch question from the Database'
+                    message: 'This question does not exist'
                 });
             }) 
        }
 
-           // Endpoint 6
+    // Post A Response
 
-        postResponse (req, res) {
+    postResponse (req, res) {
                 const { surveyId, respondentId, surveyResponses } = req.body;
                 if ( !surveyId || !respondentId || !surveyResponses ) ({
                     error: true,
@@ -180,9 +239,9 @@ class SurveyController {
         }
 
 
-            // Save a category for Endpoint
+    // Save A Category 
 
-        category (req, res) {
+    category (req, res) {
             const { name } = req.body
             console.log(req.body)
             categoryModel.create({
@@ -203,9 +262,9 @@ class SurveyController {
         )}
 
 
-        // Get all questions
+    // Get all Questions
 
-        getQuestions (req, res) {
+    getQuestions (req, res) {
 
             return QuestionsModel.aggregate([
                 {

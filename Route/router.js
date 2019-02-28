@@ -6,37 +6,43 @@ const SurveyController = require('../Controllers/SurveyController');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
+// SIgnUp 
+router.post('/signup', (req, res) => {
+    return new SurveyController().signUp(req, res);
+})
 
-// Sign in... Endpoint 2
 
-router.post('/signIn', (req, res) => {
+// SignIn
+
+router.post('/signin', (req, res) => {
     return new SurveyController().signIn(req, res)
 });
 
-// Save a Question... Endpoint 3
+// Create Survey
 
 router.post('/questions', (req, res) => {
    return new SurveyController().createSurvey(req, res);
 });
 
-// Query by userId...Endpoint 4
+// Get Questions By UserId
 
 router.get('/surveys/:userId', (req, res) => {
     return new SurveyController().getQuestionsByUserId(req, res);
 })
 
-// Get Individual Questions...Endpoint 5
+// Get Questions By Id
 
 router.get('/question/:questionsId', (req, res) => {
     return new SurveyController().getIndQuestions(req, res);
 })
 
-// Post response...Endpoint 6
-router.get('/postresponse', (req, res) => {
+// Post A Response
+
+router.post('/post-response', (req, res) => {
     return new SurveyController().postResponse(req, res);
 })
 
-// save the category details
+// Save A Category 
 
 router.post('/category', (req, res) => {
     return new SurveyController().category(req, res);

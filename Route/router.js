@@ -32,7 +32,7 @@ router.get('/surveys/:userId', (req, res) => {
 
 // Get Questions By Id
 
-router.get('/question/:questionsId', (req, res) => {
+router.get('/question/:questionId', (req, res) => {
     return new SurveyController().getIndQuestions(req, res);
 })
 

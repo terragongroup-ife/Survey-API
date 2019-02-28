@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const questionsSchema = new Schema ({
     userId: {
-        type: String,
-        required: true,    
+        ref: 'SignUp',
+        type: mongoose.Schema.Types.ObjectId    
     },
     surveyName: {
         type: String,

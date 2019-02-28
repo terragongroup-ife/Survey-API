@@ -4,7 +4,6 @@ const QuestionsModel = require('../Model/questions');
 const responseModel = require('../Model/response');
 const signUpModel = require('../Model/signUp')
 
-
 class SurveyController {
 //handles all logic for surveys
 
@@ -30,9 +29,7 @@ class SurveyController {
                         error: false,
                         status: 201,
                         message: 'You have successfully signed up',
-
-
-
+                        userId: resp._id
                 })
             }).catch((err) => {
                 console.log('Not saved');
@@ -104,8 +101,7 @@ class SurveyController {
                 message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
             });
         }
-
-        if (surveyQuestions.length === 0) {
+         if (surveyQuestions.length === 0) {
             return res.send({
                 error: true,
                 code: 400,
@@ -140,37 +136,29 @@ class SurveyController {
 
     getQuestionsByUserId (req, res) {
         const { userId } = req.params;
-        if ( !userId ) {
-            return res.send ({
+        if (userId.length === 0) {
+            console.log(userId)
+            return res.send({
                 error: true,
                 code: 400,
-                message: 'userId must be passed'
-            })
+                message: "No Id sent"
+            });
         }
-        return QuestionsModel.findById({
-                userId
-            }).then((resp) => {
-            if (resp) { 
-                console.log(resp);
+        return QuestionsModel.findOne({userId}).then((resp) => {
+            if (resp) {
+                console.log('Query was successful');
              return res.send ({
                 error: false,
                 code: 201,
-                message: 'Query was successfull',
                 result: resp 
                 });
-            }
-            console.log(resp);
-        return res.send ({
-                error: false,
-                code: 201,
-                message: 'Question was successfully fetched'    
-            });
-        }).catch((err) => {
-            console.log('Data does not exist in the DB');
+            } 
+        }).catch(() => {
+            console.log('Unable to query question');
             return res.send ({
                 error: true,
                 status: 400,
-                message: 'Unable to query question'
+                message: 'Invalid UserId'
             });
         }) 
     }
@@ -178,12 +166,17 @@ class SurveyController {
      // Get Questions By Id
 
     getIndQuestions (req, res) {
-        const id = (req.params.questionsId);
-                QuestionsModel.findById({
-                    _id: id
-                }).then((resp) => {
-                if (resp) { 
-                    console.log(resp);
+        const { questionId } = req.params;
+        if (questionId.length === 0) {
+            return res.send({
+                error: true,
+                code: 400,
+                message: "No Id sent"
+            });
+        }
+              return  QuestionsModel.findById(questionId)
+              .then((resp) => {
+            if (resp) {
                  return res.send ({
                     error: false,
                     code: 201,
@@ -191,18 +184,17 @@ class SurveyController {
                     result: resp 
                     });
                 }
-                console.log(resp);
-            return res.send ({
+                return res.send ({
                     error: false,
                     code: 201,
                     message: 'Question was successfully fetched'    
                 });
-            }).catch((err) => {
+            }).catch(() => {
                 console.log('Unable to fetch question');
                 return res.send ({
                     error: true,
                     status: 400,
-                    message: 'This question does not exist'
+                    message: 'Invalid question Id'
                 });
             }) 
        }

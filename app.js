@@ -6,8 +6,8 @@ const config = require('./Config/config');
 const mongo = require('./Settings/settings');
 const app = express();
 
-const port = config.server.port;
-const appName = config.appName;
+const port = config.server.port  || 3000;
+const appName = config.appName || "Survey";
 
 app.use(router);
 

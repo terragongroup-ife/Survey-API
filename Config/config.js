@@ -3,7 +3,7 @@ const appName = 'Survey Test';
 const config = {
   appName: process.env.APP_NAME,
   server: {
-    port: process.env.APP_PORT
+    port: process.env.PORT
   },
   mongo: {
     salt_value: 10,

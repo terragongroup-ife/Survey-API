@@ -3,6 +3,8 @@ const categoryModel = require('../Model/category');
 const QuestionsModel = require('../Model/questions');
 const responseModel = require('../Model/response');
 const signUpModel = require('../Model/signUp')
+const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
 
 class SurveyController {
 //handles all logic for surveys
@@ -10,9 +12,8 @@ class SurveyController {
     // SIgnUp
 
     signUp (req, res) {
-            const { name, email } = req.body;
-            console.log(req.body);
-        if ( !name || !email) {
+            const { name, email, password } = req.body;
+        if ( !name || !email || !password ) {
                 console.log('Some fields are not filled');
                 return res.send({
                     error: true,
@@ -20,63 +21,110 @@ class SurveyController {
                     message: "name, email must be passed"
                 }); 
             }
-        return signUpModel.create({
-                name,
-                email
-            }).then ((resp) => {
-                console.log('Sign up was successful')
-            return res.send({
-                        error: false,
-                        status: 201,
-                        message: 'You have successfully signed up',
-                        userId: resp._id
-                })
-            }).catch((err) => {
-                console.log('Not saved');
-                if (err) {
-                    if (err.name === 'MongoError' && err.code === 11000) {
-                        return res.send ({
-                            code: 400,
-                            message: 'Email already exist' 
-                        })
-                    } else {
-                        return res.send({
-                            err: true, 
-                            code: 400,
-                            message: 'Email is invalid' 
+            else{
+                bcrypt.hash(req.body.password, 10, (err, hashedPassword)=>{
+                    if(err){
+                        return res.status(500).json({
+                            error: err.message
                         });
                     }
-                }
-            })
+                    else{
+                        console.log(hashedPassword)
+                       return signUpModel.create({
+                            name,
+                            email,
+                            password: hashedPassword
+                        }).then ((resp) => {
+                            console.log('Sign up was successful')
+                        return res.send({
+                                    error: false,
+                                    status: 201,
+                                    message: 'You have successfully signed up',
+                                    userId: resp._id
+                            })
+                        }).catch((err) => {
+                            console.log('Not saved');
+                            if (err) {
+                                if (err.name === 'MongoError' && err.code === 11000) {
+                                    return res.send ({
+                                        code: 400,
+                                        message: 'Email already exist' 
+                                    })
+                                } else {
+                                    return res.send({
+                                        err: true, 
+                                        code: 400,
+                                        message: err 
+                                    });
+                                }
+                            }
+                        })
+                    }
+
+                });
+            }
+    
         }
+    
 
     //SignIn
 
     signIn (req, res) {
-            const { email, authToken } = req.body;
-            if ( !email || !authToken ) {
+            const { email, password } = req.body;
+            if ( !email || !password ) {
                 return res.send({
                     err: true, 
                     code: 400,
-                    message: 'name, email, authToken must be passed'
+                    message: 'name, password must be passed'
                 })
             }
             return signUpModel.findOne({email})
                 .then((response) => {
-                    console.log('User succesfully signed in');
                     if (response) {
+                        bcrypt.compare(req.body.password, response.password, (err, result)=>{
+                            if (err){
+                                // do something
+                                return res.send({
+                                    err: true, 
+                                    code: 503,
+                                    message: 'Auth failed',
+                                });
+                            }
+                            if(result){
+                                const token =jwt.sign({
+                                    email: response.email,
+                                    userID: response._id
+                                  },
+                                  process.env.JWT_SECRET,
+                                   {
+                                     expiresIn: "1h"
+                                      }
+                                );
+                                console.log('User succesfully signed in');
+                                return res.send({
+                                    err: false, 
+                                    code: 200,
+                                    message: 'User successfully signed in',
+                                    token: token
+                                });
+                            }
+                            else{
+                                return res.send({
+                                    err: false, 
+                                    code: 200,
+                                    message: 'Incorrect password'
+                                });
+                            }
+                        });
+                    }
+                    else{
+                        console.log('Unable to sign in');
                         return res.send({
                             err: false, 
-                            code: 200,
-                            message: 'User successfully signed in'
+                            code: 404,
+                            message: 'User does not exisit, kindly sign up'
                         });
                     } 
-                    console.log('Unable to sign in');
-                    return res.send({
-                        err: false, 
-                        code: 404,
-                        message: 'User does not exisit, kindly sign up'
-                    });
                 })
                 .catch((err) => {
                     console.log('Unable to sign in user');
@@ -302,11 +350,3 @@ class SurveyController {
         }
 }
 module.exports = SurveyController;
-
-
-
-
-
-
-
-

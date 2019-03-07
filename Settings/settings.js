@@ -10,7 +10,7 @@ const connectionUrl = `mongodb://karo:password123@ds137703.mlab.com:37703/survey
 console.log('Connecting to Mongo DB on ', connectionUrl);
 mongoose.connect(connectionUrl, {useNewUrlParser: true})
     .then((data) => {
-        console.log('MongoDB was connected sucessfully', data);
+        console.log('MongoDB was connected sucessfully');
     }).catch((err) => {
         console.log('Unable to connect to mongoBD', err);
         process.exit();

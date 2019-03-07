@@ -18,7 +18,7 @@ class SurveyController {
                 return res.status(400).send({
                     error: true,
                     code: 400,
-                    message: "name, email must be passed"
+                    message: "name, email and password must be passed"
                 }); 
             }
             else{

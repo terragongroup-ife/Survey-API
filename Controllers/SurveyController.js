@@ -15,7 +15,7 @@ class SurveyController {
             const { name, email, password } = req.body;
         if ( !name || !email || !password ) {
                 console.log('Some fields are not filled');
-                return res.send({
+                return res.status(400).send({
                     error: true,
                     code: 400,
                     message: "name, email must be passed"
@@ -36,7 +36,7 @@ class SurveyController {
                             password: hashedPassword
                         }).then ((resp) => {
                             console.log('Sign up was successful')
-                        return res.send({
+                        return res.status(201).send({
                                     error: false,
                                     status: 201,
                                     message: 'You have successfully signed up',
@@ -46,7 +46,7 @@ class SurveyController {
                             console.log('Not saved');
                             if (err) {
                                 if (err.name === 'MongoError' && err.code === 11000) {
-                                    return res.send ({
+                                    return res.status(400).send ({
                                         code: 400,
                                         message: 'Email already exist' 
                                     })
@@ -72,7 +72,7 @@ class SurveyController {
     signIn (req, res) {
             const { email, password } = req.body;
             if ( !email || !password ) {
-                return res.send({
+                return res.status(400).send({
                     err: true, 
                     code: 400,
                     message: 'name, password must be passed'
@@ -83,8 +83,7 @@ class SurveyController {
                     if (response) {
                         bcrypt.compare(req.body.password, response.password, (err, result)=>{
                             if (err){
-                                // do something
-                                return res.send({
+                                return res.status(503).send({
                                     err: true, 
                                     code: 503,
                                     message: 'Auth failed',
@@ -101,7 +100,7 @@ class SurveyController {
                                       }
                                 );
                                 console.log('User succesfully signed in');
-                                return res.send({
+                                return res.status(200).send({
                                     err: false, 
                                     code: 200,
                                     message: 'User successfully signed in',
@@ -109,7 +108,7 @@ class SurveyController {
                                 });
                             }
                             else{
-                                return res.send({
+                                return res.status(200).send({
                                     err: false, 
                                     code: 200,
                                     message: 'Incorrect password'
@@ -128,9 +127,9 @@ class SurveyController {
                 })
                 .catch((err) => {
                     console.log('Unable to sign in user');
-                    return res.send({
+                    return res.status(400).send({
                         err: true, 
-                        code: 503,
+                        code: 400,
                         message: err
             })
         })
@@ -143,16 +142,16 @@ class SurveyController {
         console.log(req.body); 
         if ( !userId || !surveyName || !surveyDescription || !surveyCategory || !surveyQuestions ) {
             console.log('Some fields are not filled');
-            return res.send({
+            return res.status(400).send({
                 error: true,
                 code: 400,
                 message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
             });
         }
          if (surveyQuestions.length === 0) {
-            return res.send({
+            return res.status(204).send({
                 error: true,
-                code: 400,
+                code: 204,
                 message: "No question sent"
             });
         }
@@ -164,7 +163,7 @@ class SurveyController {
             surveyQuestions
         }).then((resp) => {
             console.log('Saved',resp);
-                return res.send ({
+                return res.status(201).send ({
                     error: false,
                     status: 201,
                     message: 'Questions was saved successfully',
@@ -172,7 +171,7 @@ class SurveyController {
                 })
             }).catch((err) => {
                 console.log('Not saved',err);
-                return res.send ({
+                return res.status(400).send ({
                     error: true,
                     status: 400,
                     message: 'Unable to save questions to the Database'
@@ -186,16 +185,16 @@ class SurveyController {
         const { userId } = req.params;
         if (userId.length === 0) {
             console.log(userId)
-            return res.send({
+            return res.status(204).send({
                 error: true,
-                code: 400,
+                code: 204,
                 message: "No Id sent"
             });
         }
         return QuestionsModel.findOne({userId}).then((resp) => {
             if (resp) {
                 console.log('Query was successful');
-             return res.send ({
+             return res.status(201).send ({
                 error: false,
                 code: 201,
                 result: resp 
@@ -203,7 +202,7 @@ class SurveyController {
             } 
         }).catch(() => {
             console.log('Unable to query question');
-            return res.send ({
+            return res.status(400).send ({
                 error: true,
                 status: 400,
                 message: 'Invalid UserId'
@@ -216,30 +215,30 @@ class SurveyController {
     getIndQuestions (req, res) {
         const { questionId } = req.params;
         if (questionId.length === 0) {
-            return res.send({
+            return res.status(204).send({
                 error: true,
-                code: 400,
+                code: 204,
                 message: "No Id sent"
             });
         }
               return  QuestionsModel.findById(questionId)
               .then((resp) => {
             if (resp) {
-                 return res.send ({
+                 return res.status(201).send ({
                     error: false,
                     code: 201,
                     message: 'Query was successfull',
                     result: resp 
                     });
                 }
-                return res.send ({
+                return res.status(201).send ({
                     error: false,
                     code: 201,
                     message: 'Question was successfully fetched'    
                 });
             }).catch(() => {
                 console.log('Unable to fetch question');
-                return res.send ({
+                return res.status(400).send ({
                     error: true,
                     status: 400,
                     message: 'Invalid question Id'
@@ -253,7 +252,7 @@ class SurveyController {
                 const { surveyId, respondentId, surveyResponses } = req.body;
                 if ( !surveyId || !respondentId || !surveyResponses ) ({
                     error: true,
-                    code: 503,
+                    code: 400,
                     message: "surveyId, respondentId, surveyResponses must be passed"
                 })
             return responseModel.create({
@@ -262,7 +261,7 @@ class SurveyController {
                 surveyResponses
             }).then((response) => {
                 console.log('Response saved succesfully', response);
-                return res.send({
+                return res.status(200).send({
                     err: false, 
                     code: 200,
                     message: 'Response saved succesfully',
@@ -270,7 +269,7 @@ class SurveyController {
                 });
             }).catch(() => {
                 console.log('Unable to save response');
-                return res.send({
+                return res.st(400).send({
                     err: true, 
                     code: 400,
                     message: 'Unable to save response', 
@@ -326,14 +325,14 @@ class SurveyController {
                 }
             ]).then((resp)=>{
                 if (resp.length === 0){
-                    return res.send ({
+                    return res.status(404).send ({
                         error: true,
                         code: 404,
                         message: 'No questions found'
                     })
                 }            
                 console.log(resp)
-                return res.send ({
+                return res.status(201).send ({
                     error: false,
                     code: 201,
                     result: resp,
@@ -341,7 +340,7 @@ class SurveyController {
                 });
             }).catch(err =>{
                 console.log(err)
-                return res.send ({
+                return res.status(400).send ({
                     error: true,
                     status: 400,
                     message: 'Unable to fetch questions from the Database'

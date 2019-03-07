@@ -119,7 +119,7 @@ class SurveyController {
                     }
                     else{
                         console.log('Unable to sign in');
-                        return res.send({
+                        return res.status(404).send({
                             err: false, 
                             code: 404,
                             message: 'User does not exisit, kindly sign up'

@@ -5,9 +5,12 @@ const router = require('./Route/router');
 const config = require('./Config/config');
 const mongo = require('./Settings/settings');
 const app = express();
+const cors = require('cors');
 
 const port = config.server.port;
 const appName = config.appName || "Survey";
+
+app.use(cors());
 
 app.use(router);
 

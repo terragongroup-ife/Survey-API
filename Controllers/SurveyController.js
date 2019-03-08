@@ -108,9 +108,9 @@ class SurveyController {
                                 });
                             }
                             else{
-                                return res.status(200).send({
+                                return res.status(401).send({
                                     err: false, 
-                                    code: 200,
+                                    code: 401,
                                     message: 'Incorrect password'
                                 });
                             }

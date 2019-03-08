@@ -10,7 +10,18 @@ const cors = require('cors');
 const port = config.server.port;
 const appName = config.appName || "Survey";
 
-app.use(cors());
+// Setting CORS for server conflicts.
+app.use( (req,res, next)=>{
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers",
+     "Origin, X-Requested-With, Content-Type, Accept. Authorization");
+     next();
+
+    if(req.method === "OPTIONS"){
+        res.header("Acess-Control-Allow-Methods", "POST, GET, PUT, PATCH, DELETE");
+        return res.status(200).json({});
+    }
+});
 
 app.use(router);
 

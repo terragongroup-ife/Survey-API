@@ -10,7 +10,7 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 
 // SIgnUp 
-router.post('/signup', (req, res) => {
+router.post('/signup',  app.use(cors()),(req, res) => {
     return new SurveyController().signUp(req, res);
 
 });
@@ -18,7 +18,7 @@ router.post('/signup', (req, res) => {
 
 // SignIn
 
-router.post('/signin', (req, res) => {
+router.post('/signin', app.use(cors()),(req, res) => {
     return new SurveyController().signIn(req, res)
 });
 

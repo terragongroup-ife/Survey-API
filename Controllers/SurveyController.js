@@ -13,6 +13,7 @@ class SurveyController {
 
     signUp (req, res) {
             const { name, email, password } = req.body;
+            console.log(req.body);
         if ( !name || !email || !password ) {
                 console.log('Some fields are not filled');
                 return res.status(400).send({
@@ -75,7 +76,7 @@ class SurveyController {
                 return res.status(400).send({
                     err: true, 
                     code: 400,
-                    message: 'name, password must be passed'
+                    message: 'email, password must be passed'
                 })
             }
             return signUpModel.findOne({email})

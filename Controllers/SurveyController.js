@@ -6,6 +6,7 @@ const signUpModel = require('../Model/signUp')
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
+
 class SurveyController {
 //handles all logic for surveys
 

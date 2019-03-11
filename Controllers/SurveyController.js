@@ -39,7 +39,7 @@ class SurveyController {
                             console.log('Sign up was successful')
                         return res.status(201).send({
                                     error: false,
-                                    status: 201,
+                                    code: 201,
                                     message: 'You have successfully signed up',
                                     userId: resp._id
                             })
@@ -53,9 +53,9 @@ class SurveyController {
                                     })
                                 } else {
                                     return res.send({
-                                        err: true, 
+                                        error: true, 
                                         code: 400,
-                                        message: err 
+                                        message: error 
                                     });
                                 }
                             }
@@ -74,7 +74,7 @@ class SurveyController {
             const { email, password } = req.body;
             if ( !email || !password ) {
                 return res.status(400).send({
-                    err: true, 
+                    error: true, 
                     code: 400,
                     message: 'email, password must be passed'
                 })
@@ -85,7 +85,7 @@ class SurveyController {
                         bcrypt.compare(req.body.password, response.password, (err, result)=>{
                             if (err){
                                 return res.status(503).send({
-                                    err: true, 
+                                    error: true, 
                                     code: 503,
                                     message: 'Auth failed',
                                 });
@@ -110,7 +110,7 @@ class SurveyController {
                             }
                             else{
                                 return res.status(401).send({
-                                    err: false, 
+                                    error: false, 
                                     code: 401,
                                     message: 'Incorrect password'
                                 });
@@ -120,18 +120,18 @@ class SurveyController {
                     else{
                         console.log('Unable to sign in');
                         return res.status(404).send({
-                            err: false, 
+                            error: false, 
                             code: 404,
                             message: 'User does not exisit, kindly sign up'
                         });
                     } 
                 })
-                .catch((err) => {
+                .catch((error) => {
                     console.log('Unable to sign in user');
                     return res.status(400).send({
-                        err: true, 
+                        error: true, 
                         code: 400,
-                        message: err
+                        message: error
             })
         })
      }
@@ -170,8 +170,8 @@ class SurveyController {
                     message: 'Questions was saved successfully',
                     result: resp
                 })
-            }).catch((err) => {
-                console.log('Not saved',err);
+            }).catch((error) => {
+                console.log('Not saved',error);
                 return res.status(400).send ({
                     error: true,
                     status: 400,
@@ -263,7 +263,7 @@ class SurveyController {
             }).then((response) => {
                 console.log('Response saved succesfully', response);
                 return res.status(200).send({
-                    err: false, 
+                    error: false, 
                     code: 200,
                     message: 'Response saved succesfully',
                     response: response
@@ -271,7 +271,7 @@ class SurveyController {
             }).catch(() => {
                 console.log('Unable to save response');
                 return res.st(400).send({
-                    err: true, 
+                    error: true, 
                     code: 400,
                     message: 'Unable to save response', 
                 });
@@ -339,8 +339,8 @@ class SurveyController {
                     result: resp,
                     message: 'Questions were successfully fetched'
                 });
-            }).catch(err =>{
-                console.log(err)
+            }).catch(error =>{
+                console.log(error)
                 return res.status(400).send ({
                     error: true,
                     status: 400,

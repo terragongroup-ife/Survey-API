@@ -15,8 +15,8 @@ const questionsSchema = new Schema ({
         required: true,    
     },
     surveyCategory: {
-        ref: 'Category',
-        type: mongoose.Schema.Types.ObjectId
+        type: String,
+        required: true
     },
     surveyQuestions: {
         type: [ Object ],

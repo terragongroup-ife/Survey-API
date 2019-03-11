@@ -1,20 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
+const cors = require("cors");
+const app = express();
 const SurveyController = require('../Controllers/SurveyController');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
+
 // SIgnUp 
-router.post('/signup', (req, res) => {
+router.post('/signup',  app.use(cors()),(req, res) => {
     return new SurveyController().signUp(req, res);
-})
+
+});
 
 
 // SignIn
 
-router.post('/signin', (req, res) => {
+router.post('/signin', app.use(cors()),(req, res) => {
     return new SurveyController().signIn(req, res)
 });
 

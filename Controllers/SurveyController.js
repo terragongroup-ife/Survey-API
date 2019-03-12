@@ -102,7 +102,7 @@ class SurveyController {
                                 );
                                 console.log('User succesfully signed in');
                                 return res.status(200).send({
-                                    err: false, 
+                                    error: false, 
                                     code: 200,
                                     message: 'User successfully signed in',
                                     token: token
@@ -149,7 +149,7 @@ class SurveyController {
                 message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
             });
         }
-         if (surveyQuestions.length === 0) {
+         if (Object.keys(surveyQuestions).length === 0) {
             return res.status(204).send({
                 error: true,
                 code: 204,
@@ -166,7 +166,7 @@ class SurveyController {
             console.log('Saved',resp);
                 return res.status(201).send ({
                     error: false,
-                    status: 201,
+                    code: 201,
                     message: 'Questions was saved successfully',
                     result: resp
                 })
@@ -174,7 +174,7 @@ class SurveyController {
                 console.log('Not saved',error);
                 return res.status(400).send ({
                     error: true,
-                    status: 400,
+                    code: 400,
                     message: 'Unable to save questions to the Database'
                 })
             })
@@ -205,7 +205,7 @@ class SurveyController {
             console.log('Unable to query question');
             return res.status(400).send ({
                 error: true,
-                status: 400,
+                code: 400,
                 message: 'Invalid UserId'
             });
         }) 
@@ -241,7 +241,7 @@ class SurveyController {
                 console.log('Unable to fetch question');
                 return res.status(400).send ({
                     error: true,
-                    status: 400,
+                    code: 400,
                     message: 'Invalid question Id'
                 });
             }) 
@@ -343,7 +343,7 @@ class SurveyController {
                 console.log(error)
                 return res.status(400).send ({
                     error: true,
-                    status: 400,
+                    code: 400,
                     message: 'Unable to fetch questions from the Database'
                 });
             })

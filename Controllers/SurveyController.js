@@ -262,7 +262,7 @@ class SurveyController {
                     message: 'Response saved succesfully',
                     response: response
                 });
-            }).catch(() => {
+            }).catch((err) => {
                 console.log('Unable to save response');
                 return res.status(400).send({
                     error: true, 

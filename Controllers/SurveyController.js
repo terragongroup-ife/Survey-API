@@ -97,7 +97,7 @@ class SurveyController {
                                   },
                                   process.env.JWT_SECRET,
                                    {
-                                     expiresIn: "1h"
+                                     expiresIn: "24h"
                                       }
                                 );
                                 console.log('User succesfully signed in');

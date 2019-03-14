@@ -267,7 +267,7 @@ class SurveyController {
                 return res.status(400).send({
                     error: true, 
                     code: 400,
-                    message: 'Unable to save response', 
+                    message: 'Unable to save response', err, 
                 });
             })
         }

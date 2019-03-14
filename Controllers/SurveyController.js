@@ -253,7 +253,6 @@ class SurveyController {
                 })
             return responseModel.create({
                 surveyId,
-                respondentId,
                 surveyResponses
             }).then((response) => {
                 console.log('Response saved succesfully', response);

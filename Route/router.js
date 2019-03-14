@@ -32,13 +32,13 @@ router.post('/post-survey',  cors(),(req, res) => {
 
 // Get Questions By UserId
 
-router.get('/surveys/:userId', (req, res) => {
+router.get('/surveys/:user-id', (req, res) => {
     return new SurveyController().getQuestionsByUserId(req, res);
 })
 
-// Get Questions By Id
+// Get Questions By Survey Id
 
-router.get('/question/:questionId', (req, res) => {
+router.get('/survey/:survey-id', (req, res) => {
     return new SurveyController().getIndQuestions(req, res);
 })
 

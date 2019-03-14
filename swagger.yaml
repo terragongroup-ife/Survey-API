@@ -13,7 +13,7 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /login:
+  /signin:
     post:
       summary: For logging users in or signing users up
       operationId: login
@@ -72,7 +72,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /surveys/:user-id/:number :
+  /surveys/:user-id/:
     get:
       summary: To fetch a number of surveys for a particular user
       parameters:

@@ -26,7 +26,7 @@ router.post('/signin', (req, res) => {
 
 // Create Survey
 
-router.post('/questions',  cors(),(req, res) => {
+router.post('/post-survey',  cors(),(req, res) => {
    return new SurveyController().createSurvey(req, res);
 });
 

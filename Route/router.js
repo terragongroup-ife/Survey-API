@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const cors = require("cors");
-const app = express();
 const SurveyController = require('../Controllers/SurveyController');
 
 router.use(bodyParser.json());
@@ -16,7 +15,6 @@ router.post('/signup', (req, res) => {
     return new SurveyController().signUp(req, res);
 
 });
-
 
 // SignIn
 

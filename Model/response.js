@@ -6,10 +6,6 @@ const responseSchema = new Schema ({
         ref: 'Question',
         type: mongoose.Schema.Types.ObjectId
     },
-    respondentId: {
-        type: String,
-        required: true
-    },
     surveyResponses: {
         type: [ String ],
         required: true

@@ -226,3 +226,5 @@ components:
         surveyResponses:
           type: object
           example: {}
+    SendMessageResponse:
+      type: 

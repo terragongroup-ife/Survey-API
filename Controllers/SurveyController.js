@@ -245,11 +245,11 @@ class SurveyController {
     // Post A Response
 
     postResponse (req, res) {
-                const { surveyId, respondentId, surveyResponses } = req.body;
-                if ( !surveyId || !respondentId || !surveyResponses ) ({
+                const { surveyId, surveyResponses } = req.body;
+                if ( !surveyId || !surveyResponses ) ({
                     error: true,
                     code: 400,
-                    message: "surveyId, respondentId, surveyResponses must be passed"
+                    message: "surveyId, surveyResponses must be passed"
                 })
             return responseModel.create({
                 surveyId,

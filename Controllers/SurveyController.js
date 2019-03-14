@@ -264,7 +264,7 @@ class SurveyController {
                 });
             }).catch(() => {
                 console.log('Unable to save response');
-                return res.st(400).send({
+                return res.status(400).send({
                     error: true, 
                     code: 400,
                     message: 'Unable to save response', 

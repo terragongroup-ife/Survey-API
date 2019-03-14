@@ -141,21 +141,21 @@ class SurveyController {
     createSurvey (req, res) {
         const { userId, surveyName, surveyDescription, surveyCategory, surveyQuestions } = req.body
         console.log(req.body); 
-        // if ( !userId || !surveyName || !surveyDescription || !surveyCategory || !surveyQuestions ) {
-        //     console.log('Some fields are not filled');
-        //     return res.status(400).send({
-        //         error: true,
-        //         code: 400,
-        //         message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
-        //     });
-        // }
-        //  if (Object.keys(surveyQuestions).length === 0) {
-        //     return res.status(204).send({
-        //         error: true,
-        //         code: 204,
-        //         message: "No question sent"
-        //     });
-        // }
+        if ( !userId || !surveyName || !surveyDescription || !surveyCategory || !surveyQuestions ) {
+            console.log('Some fields are not filled');
+            return res.status(400).send({
+                error: true,
+                code: 400,
+                message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
+            });
+        }
+         if (Object.keys(surveyQuestions).length === 0) {
+            return res.status(204).send({
+                error: true,
+                code: 204,
+                message: "No question sent"
+            });
+        }
         return QuestionsModel.create({
             userId,
             surveyName,
@@ -211,7 +211,7 @@ class SurveyController {
         }) 
     }
 
-     // Get Questions By Id
+     // Get Questions By Survey Id
 
     getIndQuestions (req, res) {
         const { questionId } = req.params;
@@ -232,11 +232,6 @@ class SurveyController {
                     result: resp 
                     });
                 }
-                return res.status(201).send ({
-                    error: false,
-                    code: 201,
-                    message: 'Question was successfully fetched'    
-                });
             }).catch(() => {
                 console.log('Unable to fetch question');
                 return res.status(400).send ({
@@ -305,7 +300,6 @@ class SurveyController {
     // Get all Questions
 
     getQuestions (req, res) {
-
             return QuestionsModel.aggregate([
                 {
                     $lookup: {
@@ -349,4 +343,5 @@ class SurveyController {
             })
         }
 }
+
 module.exports = SurveyController;

@@ -32,21 +32,21 @@ router.post('/post-survey',  cors(),(req, res) => {
 
 // Get Questions By UserId
 
-router.get('/surveys/:user-id', (req, res) => {
+router.get('/surveys/:userId', (req, res) => {
     return new SurveyController().getQuestionsByUserId(req, res);
-})
+});
 
 // Get Questions By Survey Id
 
-router.get('/survey/:survey-id', (req, res) => {
+router.get('/survey/:questionId', (req, res) => {
     return new SurveyController().getIndQuestions(req, res);
-})
+});
 
 // Post A Response
 
 router.post('/post-response', (req, res) => {
     return new SurveyController().postResponse(req, res);
-})
+});
 
 // Save A Category 
 
@@ -58,7 +58,7 @@ router.post('/category', (req, res) => {
 
 router.get('/questions', (req, res) => {
    return new SurveyController().getQuestions(req, res);
-})
+});
 
 
 module.exports = router;

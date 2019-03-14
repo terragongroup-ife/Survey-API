@@ -7,7 +7,7 @@ const responseSchema = new Schema ({
         type: mongoose.Schema.Types.ObjectId
     },
     surveyResponses: {
-        type: [ String ],
+        type: [ Object ],
         required: true
     },
 });

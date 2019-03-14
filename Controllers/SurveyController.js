@@ -149,13 +149,13 @@ class SurveyController {
         //         message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
         //     });
         // }
-         if (Object.keys(surveyQuestions).length === 0) {
-            return res.status(204).send({
-                error: true,
-                code: 204,
-                message: "No question sent"
-            });
-        }
+        //  if (Object.keys(surveyQuestions).length === 0) {
+        //     return res.status(204).send({
+        //         error: true,
+        //         code: 204,
+        //         message: "No question sent"
+        //     });
+        // }
         return QuestionsModel.create({
             userId,
             surveyName,

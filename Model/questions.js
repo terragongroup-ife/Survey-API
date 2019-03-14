@@ -19,7 +19,7 @@ const questionsSchema = new Schema ({
         required: true
     },
     surveyQuestions: {
-        type: [ Object ],
+        type: Object,
         required: true,    
     }
 });

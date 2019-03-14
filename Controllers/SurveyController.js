@@ -141,14 +141,14 @@ class SurveyController {
     createSurvey (req, res) {
         const { userId, surveyName, surveyDescription, surveyCategory, surveyQuestions } = req.body
         console.log(req.body); 
-        if ( !userId || !surveyName || !surveyDescription || !surveyCategory || !surveyQuestions ) {
-            console.log('Some fields are not filled');
-            return res.status(400).send({
-                error: true,
-                code: 400,
-                message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
-            });
-        }
+        // if ( !userId || !surveyName || !surveyDescription || !surveyCategory || !surveyQuestions ) {
+        //     console.log('Some fields are not filled');
+        //     return res.status(400).send({
+        //         error: true,
+        //         code: 400,
+        //         message: "userId, surveyName, surveyDescription, surveyCategory, surveyQuestions must be passed"
+        //     });
+        // }
          if (Object.keys(surveyQuestions).length === 0) {
             return res.status(204).send({
                 error: true,

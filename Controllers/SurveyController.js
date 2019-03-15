@@ -170,7 +170,7 @@ class SurveyController {
                     message: 'Questions was saved successfully',
                     result: resp
                 })
-            }).catch((error) => {
+        }).catch((error) => {
                 console.log('Not saved',error);
                 return res.status(400).send ({
                     error: true,
@@ -192,7 +192,7 @@ class SurveyController {
                 message: "No Id sent"
             });
         }
-        return QuestionsModel.findOne({userId}).then((resp) => {
+        return QuestionsModel.find({userId}).then((resp) => {
             if (resp) {
                 console.log('Query was successful');
              return res.status(201).send ({
@@ -256,11 +256,12 @@ class SurveyController {
                 surveyResponses
             }).then((response) => {
                 console.log('Response saved succesfully', response);
+                console.log(response.length);
                 return res.status(200).send({
                     error: false, 
                     code: 200,
                     message: 'Response saved succesfully',
-                    response: response
+                    response: surveyId.response
                 });
             }).catch((err) => {
                 console.log('Unable to save response');

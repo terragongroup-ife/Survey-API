@@ -46,12 +46,6 @@ router.post('/post-response', (req, res) => {
     return new SurveyController().postResponse(req, res);
 });
 
-// Save A Category 
-
-router.post('/category', (req, res) => {
-    return new SurveyController().category(req, res);
-});
-
 // Get All Questions
 
 router.get('/questions', (req, res) => {

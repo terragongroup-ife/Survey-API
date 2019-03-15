@@ -261,7 +261,6 @@ class SurveyController {
                     error: false, 
                     code: 200,
                     message: 'Response saved succesfully',
-                    response: surveyId.response
                 });
             }).catch((err) => {
                 console.log('Unable to save response');
@@ -273,28 +272,6 @@ class SurveyController {
             })
         }
 
-
-    // Save A Category 
-
-    category (req, res) {
-            const { name } = req.body
-            console.log(req.body)
-            categoryModel.create({
-                name
-            }).then((resp) => {
-                console.log(resp);
-                return res.send ({
-                    error: false,
-                    message: 'Data saved successfully'
-                });
-            }).catch((error) => {
-                console.log('Data not saved', error);
-                return res.send ({
-                    error: true,
-                    message: 'Data not saved'
-            });
-            }
-        )}
 
 
     // Get all Questions

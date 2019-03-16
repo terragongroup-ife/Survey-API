@@ -1,5 +1,4 @@
 const signInModel = require('../Model/signIn')
-const categoryModel = require('../Model/category');
 const QuestionsModel = require('../Model/questions');
 const responseModel = require('../Model/response');
 const signUpModel = require('../Model/signUp')

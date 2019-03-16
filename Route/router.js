@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 const cors = require("cors");
 const SurveyController = require('../Controllers/SurveyController');
-
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 

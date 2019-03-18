@@ -45,6 +45,13 @@ router.post('/post-response', (req, res) => {
     return new SurveyController().postResponse(req, res);
 });
 
+// Get Responses By Survey Id
+
+router.get('/response/:surveyId', (req, res) => {
+    return new SurveyController().getPostResponses(req, res);
+});
+
+
 // Get All Questions
 
 router.get('/questions', (req, res) => {

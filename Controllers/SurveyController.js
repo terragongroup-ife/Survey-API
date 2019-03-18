@@ -271,6 +271,37 @@ class SurveyController {
             })
         }
 
+     // Get Responses By Survey Id
+
+    getPostResponses (req, res) {
+        const { surveyId } = req.params;
+        if (surveyId.length === 0) {
+            return res.status(204).send({
+                error: true,
+                code: 204,
+                message: "No Id sent"
+            });
+        }
+              return responseModel.find(surveyId)
+              .then((resp) => {
+            if (resp) {
+                 return res.status(201).send ({
+                    error: false,
+                    code: 201,
+                    message: 'Query was successfull',
+                    result: resp 
+                    });
+                }
+            }).catch(() => {
+                console.log('Unable to fetch response');
+                return res.status(400).send ({
+                    error: true,
+                    code: 400,
+                    message: 'Invalid survey Id'
+                });
+            }) 
+       }
+
 
 
     // Get all Questions

@@ -271,7 +271,7 @@ class SurveyController {
             })
         }
 
-     // Get Responses By Survey Id
+     // Get Post-Responses By Survey Id
 
     getPostResponses (req, res) {
         const { surveyId } = req.params;
@@ -282,25 +282,26 @@ class SurveyController {
                 message: "No Id sent"
             });
         }
-              return responseModel.find(surveyId)
-              .then((resp) => {
+        return responseModel.find({surveyId})
+            .then((resp) => {
             if (resp) {
-                 return res.status(201).send ({
+                return res.status(201).send ({
                     error: false,
                     code: 201,
                     message: 'Query was successfull',
                     result: resp 
                     });
                 }
-            }).catch(() => {
+            })
+            .catch((err) => {
                 console.log('Unable to fetch response');
                 return res.status(400).send ({
                     error: true,
                     code: 400,
-                    message: 'Invalid survey Id'
+                    message: err
                 });
-            }) 
-       }
+            })
+    }
 
 
 
